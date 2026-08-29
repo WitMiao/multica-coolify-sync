@@ -1,0 +1,49 @@
+name: Sync Multica release to Coolify
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: multica-coolify-production
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Check, deploy, and verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: production
+    env:
+      COOLIFY_URL: ${{ vars.COOLIFY_URL }}
+      COOLIFY_SERVICE_UUID: ${{ vars.COOLIFY_SERVICE_UUID }}
+      MULTICA_WEB_URL: ${{ vars.MULTICA_WEB_URL }}
+      MULTICA_API_HEALTH_URL: ${{ vars.MULTICA_API_HEALTH_URL }}
+      COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Resolve and deploy the latest compatible release
+        run: ./scripts/sync-release.sh
+
+      - name: Record the deployed version
+        run: |
+          if git diff --quiet -- docker-compose.yml; then
+            echo "No version change to record."
+            exit 0
+          fi
+
+          version=$(sed -nE 's#^[[:space:]]*image:[[:space:]]*ghcr.io/multica-ai/multica-backend:(v[0-9]+\.[0-9]+\.[0-9]+)[[:space:]]*$#\1#p' docker-compose.yml)
+          test -n "$version"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docker-compose.yml
+          git commit -m "chore: deploy Multica $version"
+          git push
