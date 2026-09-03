@@ -15,7 +15,7 @@ services:
       - coolify
 
   backend:
-    image: ghcr.io/multica-ai/multica-backend:v0.4.38
+    image: ghcr.io/multica-ai/multica-backend:v0.4.39
     restart: unless-stopped
     depends_on:
       redis:
@@ -67,7 +67,7 @@ services:
       - coolify
 
   web:
-    image: ghcr.io/multica-ai/multica-web:v0.4.38
+    image: ghcr.io/multica-ai/multica-web:v0.4.39
     restart: unless-stopped
     depends_on:
       - backend
