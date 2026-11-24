@@ -2,7 +2,9 @@ name: Sync Multica release to Coolify
 
 on:
   schedule:
-    - cron: "0 */2 * * *"
+    # 03:00 and 04:00 at fixed UTC-08:00 (PST, no DST) = 11:00 and 12:00 UTC.
+    # No timezone key: GitHub evaluates schedules in UTC, which keeps the offset fixed all year.
+    - cron: "0 11,12 * * *"
   workflow_dispatch:
 
 permissions:
