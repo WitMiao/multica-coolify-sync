@@ -4,7 +4,7 @@
 
 自动将最新兼容的 Multica 稳定版本部署到自托管 Coolify 服务。
 
-工作流每两小时（按 UTC 偶数整点）检查一次 `multica-backend` 和 `multica-web`，找出两个镜像共同存在的最新稳定语义化版本，更新 Coolify 中的 Compose 定义并完成部署验证。如果验证失败，脚本会恢复原 Compose 定义并重新部署上一个可用版本。
+工作流每两小时（UTC 每个偶数小时的第 17 分钟）检查一次 `multica-backend` 和 `multica-web`，找出两个镜像共同存在的最新稳定语义化版本，更新 Coolify 中的 Compose 定义并完成部署验证。如果验证失败，脚本会恢复原 Compose 定义并重新部署上一个可用版本。
 
 ## 工作原理
 
@@ -35,7 +35,7 @@
 | Variable | `MULTICA_WEB_URL` | `https://multica.example.com` | 部署后用于验证的公开 Web 地址 |
 | Variable | `MULTICA_API_HEALTH_URL` | `https://api.multica.example.com/health` | 返回包含 `status` 和 `started_at` JSON 的 API 健康端点 |
 
-工作流每两小时自动运行一次，时间为 UTC 的每个偶数整点（[GitHub 按 UTC 计算定时工作流](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)）。GitHub 负载较高时，定时运行可能会延迟。如需手动执行，请打开 **Actions → Sync Multica release to Coolify → Run workflow**。
+工作流每两小时自动运行一次，时间为 UTC 每个偶数小时的第 17 分钟（00:17、02:17……22:17；[GitHub 按 UTC 计算定时工作流](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)）。GitHub 负载较高时，定时运行可能会延迟，而整点是负载最高的时段，所以特意避开整点。如需手动执行，请打开 **Actions → Sync Multica release to Coolify → Run workflow**。
 
 ## Coolify 服务配置
 
