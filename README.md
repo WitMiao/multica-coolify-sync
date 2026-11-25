@@ -4,7 +4,7 @@ English | [简体中文](README.zh-CN.md)
 
 Automatically deploy the latest compatible Multica release to a self-hosted Coolify service.
 
-Daily at 03:00 and 04:00 UTC-08:00 (11:00 and 12:00 UTC), the workflow finds the newest stable semantic version that exists for both `multica-backend` and `multica-web`, updates the Coolify Compose definition, deploys it, and verifies the result. If verification fails, it restores the previous Compose definition and redeploys the last known version.
+Every two hours (on even UTC hours), the workflow finds the newest stable semantic version that exists for both `multica-backend` and `multica-web`, updates the Coolify Compose definition, deploys it, and verifies the result. If verification fails, it restores the previous Compose definition and redeploys the last known version.
 
 ## How it works
 
@@ -35,7 +35,7 @@ Add the following values under **Settings → Environments → production**. Dep
 | Variable | `MULTICA_WEB_URL` | `https://multica.example.com` | Public web URL used for post-deployment verification |
 | Variable | `MULTICA_API_HEALTH_URL` | `https://api.multica.example.com/health` | API health endpoint that returns JSON containing `status` and `started_at` |
 
-The workflow runs automatically every day at 03:00 and 04:00 UTC-08:00 (11:00 and 12:00 UTC). The offset is fixed and does not follow US daylight saving time: the cron has no `timezone` key, and [GitHub evaluates scheduled workflows in UTC](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule). GitHub may delay scheduled runs under load. To run it manually, open **Actions → Sync Multica release to Coolify → Run workflow**.
+The workflow runs automatically every two hours, at the top of each even hour in UTC ([GitHub evaluates scheduled workflows in UTC](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)). GitHub may delay scheduled runs under load. To run it manually, open **Actions → Sync Multica release to Coolify → Run workflow**.
 
 ## Coolify service configuration
 
