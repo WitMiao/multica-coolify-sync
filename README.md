@@ -4,7 +4,7 @@ English | [简体中文](README.zh-CN.md)
 
 Automatically deploy the latest compatible Multica release to a self-hosted Coolify service.
 
-Every two hours (on even UTC hours), the workflow finds the newest stable semantic version that exists for both `multica-backend` and `multica-web`, updates the Coolify Compose definition, deploys it, and verifies the result. If verification fails, it restores the previous Compose definition and redeploys the last known version.
+Every two hours (at 17 minutes past each even UTC hour), the workflow finds the newest stable semantic version that exists for both `multica-backend` and `multica-web`, updates the Coolify Compose definition, deploys it, and verifies the result. If verification fails, it restores the previous Compose definition and redeploys the last known version.
 
 ## How it works
 
@@ -35,7 +35,7 @@ Add the following values under **Settings → Environments → production**. Dep
 | Variable | `MULTICA_WEB_URL` | `https://multica.example.com` | Public web URL used for post-deployment verification |
 | Variable | `MULTICA_API_HEALTH_URL` | `https://api.multica.example.com/health` | API health endpoint that returns JSON containing `status` and `started_at` |
 
-The workflow runs automatically every two hours, at the top of each even hour in UTC ([GitHub evaluates scheduled workflows in UTC](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)). GitHub may delay scheduled runs under load. To run it manually, open **Actions → Sync Multica release to Coolify → Run workflow**.
+The workflow runs automatically every two hours, at 17 minutes past each even hour in UTC (00:17, 02:17, …, 22:17; [GitHub evaluates scheduled workflows in UTC](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)). GitHub may delay scheduled runs under load, and the start of each hour is its busiest time, so the minute is deliberately off the hour. To run it manually, open **Actions → Sync Multica release to Coolify → Run workflow**.
 
 ## Coolify service configuration
 

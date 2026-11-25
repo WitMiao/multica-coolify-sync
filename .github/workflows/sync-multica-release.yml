@@ -2,7 +2,7 @@ name: Sync Multica release to Coolify
 
 on:
   schedule:
-    - cron: "0 */2 * * *"
+    - cron: "17 */2 * * *"
   workflow_dispatch:
 
 permissions:
